@@ -1,0 +1,74 @@
+#!/usr/bin/env python
+
+import argparse
+
+INDENT = 4
+
+def get_options():
+    """
+    Get options from the command-line.
+    """
+    options = argparse.ArgumentParser(prog="PyHTML")
+    subparsers = options.add_subparsers(help="help")
+
+    # Page
+    page_options = subparsers.add_parser("page", help="page help")
+    page_options.add_argument("--title", type=str, default="My Page")
+    page_options.set_defaults(opt_type="page")
+
+    # Table
+    table_options = subparsers.add_parser("table", help="table help")
+    table_options.add_argument("--width", type=int, default=1)
+    table_options.add_argument("--height", type=int, default=1)
+    table_options.set_defaults(opt_type="table")
+
+    # Items
+    items_options = subparsers.add_parser("items", help="items help")
+    items_options.add_argument("--elements", type=int, default=1)
+    items_options.set_defaults(opt_type="items")
+
+    return options.parse_args()
+
+def print_page(title):
+    """
+    Print empty HTML page
+    """
+    print("<!DOCTYPE html>")
+    print("<html>")
+    print("{}<head>".format(" " * INDENT))
+    print("{}<title>{}</title>".format(" " * INDENT * 2, title))
+    print("{}</head>".format(" " * INDENT))
+    print("{}<body>".format(" " * INDENT))
+    print("{}<!-- content -->".format(" " * INDENT * 2))
+    print("{}</body>".format(" " * INDENT))
+    print("</html>")
+
+def print_table(width, height):
+    """
+    Print HTML table based on the `width` and `height`.
+    """
+    for j in range(height):
+        print("<tr>")
+        for j in range(width):
+            print("{}<td></td>".format(" " * INDENT))
+        print("</tr>")
+
+def print_items(elements):
+    """
+    Print HTML list based on the `elements`.
+    """
+    print("<ul>")
+    for i in range(elements):
+        print("{}<li></li>".format(" " * INDENT))
+    print("</ul>")
+
+
+if __name__ == "__main__":
+    args = get_options()
+
+    if args.opt_type == "table":
+        print_table(args.width, args.height)
+    elif args.opt_type == "items":
+        print_items(args.elements)
+    elif args.opt_type == "page":
+        print_page(args.title)
